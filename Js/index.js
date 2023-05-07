@@ -1,3 +1,4 @@
+// import anime from './lib/anime.es';
 /**
  * User Inputs:
  *      d is the distance.
@@ -27,12 +28,23 @@ const reset = document.querySelector(".reset");
 const log1 = document.querySelector("#log1");
 const log2 = document.querySelector("#log2");
 const log3 = document.querySelector("#log3");
+// const anime = require('animejs');
 
 
 /* Distance Slider*/
 distance.addEventListener("input", ()=> {
     log1.textContent = distance.value;
     d = distance.value;
+    
+    // max distance = 100 m but in pixels = 700px
+    // distance in px = 700 * distance / 100
+
+    anime({
+        targets: ".ball",
+        translateX: 700 * (distance.value / 100),
+        duration: 10,
+        easing: 'linear',
+    });
 });
 
 /* Angle Slider*/
@@ -75,4 +87,11 @@ reset.addEventListener("click", ()=> {
     v0 = velocity.value;
     theta = angle.value;
     d = distance.value;
+
+    anime({
+        targets: ".ball",
+        translateX: 0,
+        duration: 10,
+        easing: 'linear',
+    });
 });

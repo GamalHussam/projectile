@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Projectile Motion</title>
         <link rel="stylesheet" href="style.css">
+        <script src="./Js/lib/matter.min.js"></script>
     </head>
     <body>
         <header>
@@ -33,12 +34,20 @@
 
                     <button class="start">start</button>
                     <button class="reset">reset</button>
+                    <p class="maxH">0</p>
+                    <p class="goalH">0</p>
                 </div>
-                <div class="item-2"></div>
+                <div class="item-2">
+                    <div class="canvas">
+                        <div class="ball"></div>
+                        <div class="ground"></div>
+                    </div>
+                </div>
             </div>
         </main>
 
         <!-- Script -->
-        <script src="index.js"></script>
+        <script src="./Js/lib/anime.min.js"></script>
+        <script src="./Js/index.js"></script>
     </body>
 </html>

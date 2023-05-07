@@ -85,3 +85,24 @@ header img {
 .slider p{
     width: 20px;
 }
+
+.canvas {
+    width: 800px;
+    height: 500px;
+    background-color: black;
+}
+
+.ball {
+    border-radius: 100%;
+    width: 40px;
+    height: 40px;
+    translate: 30px 400px;
+    background-color: white;
+}
+
+.ground {
+    height: 2px;
+    width: 800px;
+    translate: 0 400px;
+    background-color: white;
+}
