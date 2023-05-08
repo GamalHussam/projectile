@@ -13,6 +13,7 @@ button {
     font-size: 15px;
     border: 1px solid black;
     background-color: white;
+    margin-bottom: 20px;
 }
 
 button:hover {
@@ -67,10 +68,26 @@ input[type="range"]::-webkit-slider-thumb {
     cursor: pointer;
 }
 
+header h1{
+    display: inline-block;
+    font-size: 40px;
+    translate: 20px -30px;
+}
+header h2{
+    display: inline-block;
+    font-size: 20px;
+    translate: -107px -5px;
+}
+
 header img {
     width: 5%;
     height: 5%;
     margin-left: 20px;
+    translate: 0px 30px;
+}
+
+.image {
+    translate: 10px 10px;
 }
 
 #log1, #log2, #log3 {
@@ -85,28 +102,14 @@ header img {
 .slider p{
     width: 20px;
 }
-
-/* .canvas {
-    width: 800px;
-    height: 500px;
-    background-color: black;
-} */
-
-/* .ball {
-    border-radius: 100%;
-    width: 40px;
-    height: 40px;
-    translate: 30px 400px;
-    background-color: white;
-}
-
-.ground {
-    height: 2px;
-    width: 800px;
-    translate: 0 400px;
-    background-color: white;
-} */
-
 .s {
     margin-left: 50px;
 }
+
+article p {
+    display: inline-block;
+}
+/* article {
+    border: 1px solid black;
+    margin-top: 20px;
+} */

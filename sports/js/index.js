@@ -61,13 +61,14 @@ engine.world.gravity.y = 1;
 // console.log(ball);
 
 /* ---------------------------------------------------------------------- */
-let d;
-let theta;
-var v0;
-let t1;
-let h_max;
-let t2;
-let h_goal;
+let d = 0;
+let theta = 0;
+var v0 = 0;
+let t1 = 0;
+let h_max = 0;
+let t2 = 0;
+let h_goal = 0;
+var trail = [];
 
 
 const distance = document.querySelector("#distance");
@@ -75,6 +76,8 @@ const angle = document.querySelector("#angle");
 const velocity = document.querySelector("#velocity");
 const start = document.querySelector(".start");
 const reset = document.querySelector(".reset");
+const maxH = document.querySelector(".maxH");
+const goalH = document.querySelector(".goalH");
 const log1 = document.querySelector("#log1");
 const log2 = document.querySelector("#log2");
 const log3 = document.querySelector("#log3");
@@ -112,78 +115,15 @@ velocity.addEventListener("input", ()=> {
     v0 = velocity.value;
 });
 
-/* Start Function */
-
-function startAnimation()
-{
-    theta = theta * (Math.PI / 180);
-    t1 = v0 * Math.sin(theta) / 9.8;
-    h_max = v0 * Math.sin(theta) * t1 - 0.5 * 9.8 * t1 ** 2;
-    t2 = d / (v0 * Math.cos(theta));
-    h_goal = h_max - 0.5 * 9.8 * (t2 - t1) **2;
-
-    let vx, vy;
-    vx = v0 * (Math.cos(theta));
-    vy = v0 * (Math.sin(theta));
-    // ball.isStatic = false;
-    Body.setVelocity(ball, {x: vx, y: vy});
-
-    console.log(ball);
-
-    // adding path
-    var trail = [];
-
-    Events.on(render, 'afterRender', function() {
-        trail.unshift({
-            position: Vector.clone(ball.position),
-            speed: ball.speed
-        });
-
-        Render.startViewTransform(render);
-        render.context.globalAlpha = 0.7;
-
-        for (var i = 0; i < trail.length; i += 1) {
-            var point = trail[i].position,
-                speed = trail[i].speed;
-            
-            var hue = 250 + Math.round((1 - Math.min(1, speed / 10)) * 170);
-            render.context.fillStyle = 'hsl(' + hue + ', 100%, 55%)';
-            render.context.fillRect(point.x, point.y, 2, 2);
-        }
-
-        render.context.globalAlpha = 1;
-        Render.endViewTransform(render);
-
-        if (trail.length > 2000) {
-            trail.pop();
-        }
-    });
-    
-
-    // for checking
-    // console.log(`time: ${t1}, max.Height: ${h_max}`);
-    // console.log(`time: ${t2}, ball.Height: ${h_goal}`);
-}
-
 /* Start Button */
 
 start.addEventListener("click", startAnimation);
 
 /* Reset Button */
 
-reset.addEventListener("click", ()=> {
-    velocity.value = 0;
-    distance.value = 0;
-    angle.value = 0;
-    log1.textContent = distance.value;
-    log2.textContent = angle.value;
-    log3.textContent = velocity.value;
-    v0 = velocity.value;
-    theta = angle.value;
-    d = distance.value;
-    
-    Body.setPosition(ball, {x: 30, y: 420});
-});
+reset.addEventListener("click", resetAnimation);
+
+/* ----------------------- Rendering the World and Running the Engine -------------------------- */
 
 Composite.add(engine.world, [ball, ground]);
 
@@ -195,3 +135,78 @@ var runner = Runner.create();
 
 // run the engine
 Runner.run(runner, engine);
+/* ---------------------------------------------------------------- */
+
+/* Start Function */
+
+function startAnimation()
+{
+    
+    theta = theta * (Math.PI / 180);
+    t1 = v0 * Math.sin(theta) / 9.8;
+    h_max = v0 * Math.sin(theta) * t1 - 0.5 * 9.8 * t1 ** 2;
+    t2 = d / (v0 * Math.cos(theta));
+    h_goal = h_max - 0.5 * 9.8 * (t2 - t1) **2;
+    maxH.textContent = h_max.toFixed(2);
+    goalH.textContent = h_goal.toFixed(2);
+
+    let vx, vy;
+    vx = v0 * (Math.cos(theta));
+    vy = -v0 * (Math.sin(theta));
+    Body.setVelocity(ball, {x: vx, y: vy});
+
+    Events.on(render, 'afterRender', addingPath);
+    
+
+    // for checking
+    // console.log(`time: ${t1}, max.Height: ${h_max}`);
+    // console.log(`time: ${t2}, ball.Height: ${h_goal}`);
+}
+
+/* Adding Path funciton */
+
+function addingPath()
+{
+
+    trail.unshift({
+        position: Vector.clone(ball.position),
+        speed: ball.speed
+    });
+
+    Render.startViewTransform(render);
+    render.context.globalAlpha = 0.7;
+
+    for (var i = 0; i < trail.length; i += 1) {
+        var point = trail[i].position,
+            speed = trail[i].speed;
+        
+        var hue = 250 + Math.round((1 - Math.min(1, speed / 10)) * 170);
+        render.context.fillStyle = 'hsl(' + hue + ', 100%, 55%)';
+        render.context.fillRect(point.x, point.y, 2, 2);
+    }
+
+    render.context.globalAlpha = 1;
+    Render.endViewTransform(render);
+
+    if (trail.length > 2000) {
+        trail.pop();
+    }
+}
+
+/* Reset Function */
+function resetAnimation()
+{
+    velocity.value = 0;
+    distance.value = 0;
+    angle.value = 0;
+    log1.textContent = distance.value;
+    log2.textContent = angle.value;
+    log3.textContent = velocity.value;
+    v0 = velocity.value;
+    theta = angle.value;
+    d = distance.value;
+    
+    Body.setPosition(ball, {x: 30, y: 420});
+    Body.setVelocity(ball, {x: v0, y: v0});
+    Events.off(render, 'afterRender', addingPath);
+}
