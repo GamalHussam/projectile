@@ -202,11 +202,11 @@ function resetAnimation()
     log1.textContent = distance.value;
     log2.textContent = angle.value;
     log3.textContent = velocity.value;
+    maxH.textContent = 0;
+    goalH.textContent = 0;
     v0 = velocity.value;
     theta = angle.value;
     d = distance.value;
-    maxH.textContent = 0;
-    goalH.textContent = 0;
     Body.setPosition(ball, {x: 30, y: 420});
     Body.setVelocity(ball, {x: v0, y: v0});
     Events.off(render, 'afterRender', addingPath);
